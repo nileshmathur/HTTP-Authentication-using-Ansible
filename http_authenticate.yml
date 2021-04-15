@@ -1,0 +1,41 @@
+- hosts: all
+  tasks:
+          - name: Install HTTP Package
+            package:
+                    name: "httpd"
+                    state: present
+          - name: Copy web pages
+            copy:
+                    dest: "/var/www/html/http.html"
+                    content: "This file is for HTTP Authentication\n"
+
+          - name: Making changes in Confg File of HTTP
+            replace:
+                    path: "/etc/httpd/conf/httpd.conf"
+                    regexp: "AllowOverride None"
+                    replace: "AllowOverride AuthConfig"
+          - name: Copying htaccess file 
+            copy:
+                    dest: "/var/www/html/.htaccess"
+                    src: ".htaccess"
+          - name: Installing Python package for pip 
+            package:
+                    name: "python36"
+                    state: present
+
+         
+         
+         
+          - name: Installing passlib library for htpasswd module
+            pip:
+                    name: "passlib"
+         
+          - name: Creating file for user to authenticate
+            htpasswd:
+                    path: "/etc/www.passwd"
+                    name: "nilesh"
+                    password: "nilesh"
+
+
+
+
